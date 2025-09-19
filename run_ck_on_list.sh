@@ -43,37 +43,37 @@ process_repo() {
 }
 
 # lê CSV completo pulando header
-# tail -n +2 "$LIST" | cut -d',' -f1 | while IFS= read -r fullname; do
-#   process_repo "$fullname"
-# done
+tail -n +2 "$LIST" | cut -d',' -f1 | while IFS= read -r fullname; do
+  process_repo "$fullname"
+done
 
 # le somente 1 repo
-# tail -n +2 "$LIST" | cut -d',' -f1 | head -n 1 | while IFS= read -r fullname; do
-#   process_repo "$fullname"
-# done
+#tail -n +2 "$LIST" | cut -d',' -f1 | head -n 1 | while IFS= read -r fullname; do
+#  process_repo "$fullname"
+#done
 
 # lê CSV pulando header e tenta até achar um repo com arquivos Java
-tail -n +2 "$LIST" | cut -d',' -f1 | while IFS= read -r fullname; do
-  owner=$(echo "$fullname" | cut -d'/' -f1)
-  repo=$(echo "$fullname" | cut -d'/' -f2)
-  target_dir="./clones/${owner}_${repo}"
-
-  # Clona se necessário
-  if [ ! -d "$target_dir/.git" ]; then
-    echo "Clonando $fullname ..."
-    git clone --depth 1 "https://github.com/${fullname}.git" "$target_dir" || { echo "Clone falhou: $fullname"; continue; }
-  fi
-
-  # Verifica se há arquivos .java
-  java_count=$(find "$target_dir" -name "*.java" | wc -l)
-  if [ "$java_count" -eq 0 ]; then
-    echo "Nenhum arquivo Java em $fullname. Excluindo clone..."
-    rm -rf "$target_dir"
-    continue
-  fi
-
-  # Se chegou aqui, tem arquivos Java
-  echo "Repo com Java encontrado: $fullname"
-  process_repo "$fullname"
-  break  # sai do loop após processar um repo válido
-done
+#tail -n +2 "$LIST" | cut -d',' -f1 | while IFS= read -r fullname; do
+#  owner=$(echo "$fullname" | cut -d'/' -f1)
+#  repo=$(echo "$fullname" | cut -d'/' -f2)
+#  target_dir="./clones/${owner}_${repo}"
+#
+#  # Clona se necessário
+#  if [ ! -d "$target_dir/.git" ]; then
+#    echo "Clonando $fullname ..."
+#    git clone --depth 1 "https://github.com/${fullname}.git" "$target_dir" || { echo "Clone falhou: $fullname"; continue; }
+#  fi
+#
+#  # Verifica se há arquivos .java
+#  java_count=$(find "$target_dir" -name "*.java" | wc -l)
+#  if [ "$java_count" -eq 0 ]; then
+#    echo "Nenhum arquivo Java em $fullname. Excluindo clone..."
+#    rm -rf "$target_dir"
+#    continue
+#  fi
+#
+#  # Se chegou aqui, tem arquivos Java
+#  echo "Repo com Java encontrado: $fullname"
+#  process_repo "$fullname"
+#  break  # sai do loop após processar um repo válido
+#done
