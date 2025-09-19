@@ -9,8 +9,10 @@
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
         devShell = pkgs.mkShell {
-          buildInputs = with pkgs;
-            [ (python3.withPackages (ps: with ps; [ requests ])) ];
+          buildInputs = with pkgs; [
+            (python3.withPackages (ps: with ps; [ requests ]))
+            jdk21
+          ];
         };
       });
 }
