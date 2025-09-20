@@ -10,7 +10,15 @@
       in {
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
-            (python3.withPackages (ps: with ps; [ requests ]))
+            (python3.withPackages (ps:
+              with ps; [
+                requests
+                pandas
+                numpy
+                PyGithub
+                matplotlib
+                seaborn
+              ]))
             jdk21
           ];
         };
