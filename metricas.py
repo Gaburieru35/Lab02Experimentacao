@@ -45,19 +45,23 @@ if TOKEN:
     def get_repo_info(repo_fullname):
         repo = g.get_repo(repo_fullname)
         created = repo.created_at
-        idade = (datetime.now() - created).days / 365
+        idade = (datetime.now(created.tzinfo) - created).days / 365
         return {
             "estrelas": repo.stargazers_count,
             "releases": repo.get_releases().totalCount,
             "idade_anos": round(idade, 2),
         }
 
+    def normalizar_nome(local_name):
+        return local_name.replace("_", "/", 1)
+
     infos = []
     for repo_name in df_final["repo"]:
+        repo_fullname = normalizar_nome(repo_name)
         try:
-            info = get_repo_info(repo_name)
+            info = get_repo_info(repo_fullname)
         except Exception as e:
-            print(f"Erro ao coletar {repo_name}: {e}")
+            print(f"Erro ao coletar {repo_fullname}: {e}")
             info = {"estrelas": None, "releases": None, "idade_anos": None}
         infos.append(info)
 
